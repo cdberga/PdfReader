@@ -69,7 +69,7 @@ public class App {
 
 	private static void populateRegions() {
 //		regions.put("NrNota", new Rectangle(849, 115, 80, 19));
-		regions.put("NrNota", new Rectangle(0, 40, 1800, 80));
+		regions.put("NrNota", new Rectangle(400, 60, 80, 80));
 	}
 	/**
 	 *
