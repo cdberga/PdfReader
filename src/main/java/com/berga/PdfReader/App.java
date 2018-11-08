@@ -20,7 +20,7 @@ public class App {
 	 * Le o conteudo (texto) de um arquivo pdf
 	 *
 	 */
-	static Map <String, Rectangle> regions = new HashMap<String, Rectangle>();
+	static Map<String, Rectangle> regions = new HashMap<String, Rectangle>();
 
 	public static String extraiTextoDoPDF(File caminho) {
 		PDDocument pdfDocument = null;
@@ -43,7 +43,7 @@ public class App {
 
 	public static String getTextArea() {
 		try {
-			PDDocument document = PDDocument.load(new File("/home/carlos/Documentos/pes/octo/NC2018-09-26.pdf"));
+			PDDocument document = PDDocument.load(new File("/home/carlos/Documentos/pes/octo/NC2018-10-25.pdf"));
 			exibirAreas(document);
 		} catch (Exception e) {
 
@@ -51,26 +51,50 @@ public class App {
 		return null;
 	}
 
+	private static void populateRegions() {
+		regions.put("Nota", new Rectangle(425, 60, 45, 10));
+		regions.put("Data", new Rectangle(520, 60, 45, 10));
+		regions.put("ope", new Rectangle(93, 252, 450, 198));
+		regions.put("Liq", new Rectangle(500, 481, 47, 10));
+		regions.put("Corr", new Rectangle(500, 571, 47, 10));
+		regions.put("iss", new Rectangle(500, 601, 47, 10));
+		regions.put("ir", new Rectangle(500, 610, 47, 10));
+		regions.put("tot", new Rectangle(500, 500, 47, 10));
+	}
+
 	private static void exibirAreas(PDDocument document) throws IOException {
 		PDFTextStripperByArea stripper = new PDFTextStripperByArea();
 		stripper.setSortByPosition(true);
 		PDPage firstPage = document.getPage(0);
-		getRegion(stripper);
+		getRegions(stripper);
 		stripper.extractRegions(firstPage);
-		System.out.println("Text in the area:" + regions.get("NrNota"));
-		System.out.println(stripper.getTextForRegion("NrNota"));
+		printRegions(stripper);
 	}
 
-	private static Rectangle getRegion(PDFTextStripperByArea stripper) {
-		Rectangle rect = regions.get("NrNota");
-		stripper.addRegion("NrNota", rect);
-		return regions.get("NrNota");
+	private static void getRegions(PDFTextStripperByArea stripper) {
+		for (String key : regions.keySet()) {
+			stripper.addRegion(key, regions.get(key));
+		}
 	}
 
-	private static void populateRegions() {
-//		regions.put("NrNota", new Rectangle(849, 115, 80, 19));
-		regions.put("NrNota", new Rectangle(400, 60, 80, 80));
+	private static void printRegions(PDFTextStripperByArea stripper) {
+		for (String key : regions.keySet()) {
+			System.out.println("Text in the area:" + regions.get(key));
+			String []value = null;
+			if(key.equals("ope")) {
+				value = stripper.getTextForRegion(key).split("\n");
+			}
+			else {
+				value = stripper.getTextForRegion(key).replace("\n", "").split("\\|");
+			}
+			System.out.println("[" + key + ": ");
+			for (String line : value) {
+				System.out.println(line);
+			}
+			System.out.println("]");
+		}
 	}
+
 	/**
 	 *
 	 * Extrai o conteudo do arquivo indicado
@@ -80,7 +104,6 @@ public class App {
 		populateRegions();
 		getTextArea();
 	}
-
 
 	private static void lerTextoDeArquivo() {
 		File arquivo = new File("/home/carlos/Documentos/pes/octo/NC2018-10-25.pdf");
