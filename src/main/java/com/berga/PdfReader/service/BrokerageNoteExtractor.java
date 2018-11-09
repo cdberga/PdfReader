@@ -17,11 +17,11 @@ public class BrokerageNoteExtractor {
 		infos = RegionExtractor.extractFromFile(file, regions, 0);
 	}
 	
-	private void splitOperations() {
-		String[] operations = infos.get("Oper").split("\n");
+	public Map<String, String> getInfoMap() {
+		return infos;
 	}
 	
-	public String showRegions() {
+	public String getNoteInfo() {
 		return infos.toString();
 	}
 

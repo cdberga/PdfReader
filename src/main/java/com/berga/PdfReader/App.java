@@ -27,7 +27,7 @@ public class App {
 	 */
 	public static void main(String[] args) throws InvalidPasswordException, IOException {
 		BrokerageNoteExtractor bne = new BrokerageNoteExtractor("/home/carlos/Documentos/pes/octo/NC2018-10-25.pdf");
-		System.out.println(bne.showRegions());
+		System.out.println(bne.getNoteInfo());
 //		lerTextoDeArquivo();
 	}
 
